@@ -3,7 +3,9 @@ package com.example.cs242calc;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -23,50 +25,42 @@ public class Calculator extends Application
         numberButtons = new ArrayList<Button>();
         opButtons = new ArrayList<Button>();
         textOutput = num1 = num2 = "";
+        GridPane grid = new GridPane();
 
-        for (int i = 1; i <= 9; i++)
+        int i = 1;
+        for (int r = 0; r < 5; r++)
         {
-            Button btn = new Button(String.valueOf(i));
-            int finalI = i;
-            btn.setOnAction(new EventHandler<ActionEvent>()
+            for (int c = 0; c < 2; c++)
             {
-                @Override
-                public void handle(ActionEvent arg)
+                Button btn = new Button(String.valueOf(i));
+                int finalI = i;
+                btn.setOnAction(new EventHandler<ActionEvent>()
                 {
-                    textOutput += String.valueOf(finalI);
-                    if (checkOperand())
+                    @Override
+                    public void handle(ActionEvent arg)
                     {
-                        num2 += String.valueOf(finalI);
+                        textOutput += String.valueOf(finalI);
+                        if (checkOperand())
+                        {
+                            num2 += String.valueOf(finalI);
+                        } else
+                        {
+                            num1 += String.valueOf(finalI);
+                        }
                     }
-                    else
-                    {
-                        num1 += String.valueOf(finalI);
-                    }
-                }
-            });
-            numberButtons.add(btn);
-        }
-        // add 0 button separately because it's at the end / out of order
-        Button zeroButton = new Button("0");
-        zeroButton.setOnAction(new EventHandler<ActionEvent>()
-        {
-            @Override
-            public void handle(ActionEvent arg)
-            {
-                textOutput += "0";
-                if (checkOperand())
-                {
-                    num2 += "0";
-                }
-                else
-                {
-                    num1 += "0";
-                }
+                });
+                numberButtons.add(btn);
+                grid.add(btn, c, r);
+
+                if (i == 9) i = 0;
+                else i++;
             }
-        });
-        numberButtons.add(zeroButton);
+        }
 
-
+        // Visuals
+        Scene scene = new Scene(grid, 600, 700);
+        primaryStage.setTitle("Calculator");
+        primaryStage.setScene(scene);
         primaryStage.show();
     }
 
