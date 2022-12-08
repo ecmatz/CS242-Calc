@@ -10,22 +10,18 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
-
 public class Calculator extends Application
 {
-    private ArrayList<Button> numberButtons;
-
-    private ArrayList<Button> opButtons;
-
     private String num1, num2;
 
     private String textOutput;
 
+    private static final String[] operators = { "+","-","*","/", "=" };
+
+    private boolean finishedCalc = false;
+
     public void start(Stage primaryStage) throws Exception
     {
-        numberButtons = new ArrayList<Button>();
-        opButtons = new ArrayList<Button>();
         textOutput = num1 = num2 = "";
         GridPane grid = new GridPane();
 
@@ -45,6 +41,14 @@ public class Calculator extends Application
                     @Override
                     public void handle(ActionEvent arg)
                     {
+                        if (finishedCalc)
+                        {
+                            textOutput = "";
+                            num1 = num2 = "";
+                            resultTextField.setText(textOutput);
+                            finishedCalc = false;
+                        }
+
                         textOutput += String.valueOf(finalI);
                         resultTextField.setText(textOutput);
 
@@ -57,12 +61,63 @@ public class Calculator extends Application
                         }
                     }
                 });
-                numberButtons.add(btn);
                 grid.add(btn, c, r);
 
                 if (i == 9) i = 0;
                 else i++;
             }
+        }
+
+        for (int r = 0; r < operators.length; r++)
+        {
+            String op = operators[r];
+            Button opbtn = new Button(op);
+            if (op.equals("="))
+            {
+                opbtn.setOnAction(new EventHandler<ActionEvent>()
+                {
+                    @Override
+                    public void handle(ActionEvent arg)
+                    {
+                        int x = Integer.parseInt(num1);
+                        int y = Integer.parseInt(num2);
+                        String resultOp = textOutput.replace(num1, "").replace(num2, "");
+                        switch (resultOp)
+                        {
+                            case "+":
+                                textOutput += "=" + String.valueOf(x + y);
+                                break;
+                            case "-":
+                                textOutput += "=" + String.valueOf(x - y);
+                                break;
+                            case "*":
+                                textOutput += "=" + String.valueOf(x * y);
+                                break;
+                            case "/":
+                                textOutput += "=" + String.valueOf(x / y);
+                                break;
+                            default:
+                                throw new IllegalArgumentException("Invalid operators provided to calculator.");
+                        }
+                        resultTextField.setText(textOutput);
+                        finishedCalc = true;
+                    }
+                });
+            }
+            else
+            {
+                opbtn.setOnAction(new EventHandler<ActionEvent>()
+                {
+                    @Override
+                    public void handle(ActionEvent arg)
+                    {
+                        textOutput += op;
+                        resultTextField.setText(textOutput);
+                    }
+                });
+            }
+
+            grid.add(opbtn, 2, r);
         }
 
         // Visuals
