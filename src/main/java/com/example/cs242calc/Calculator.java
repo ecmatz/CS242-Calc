@@ -28,6 +28,7 @@ public class Calculator extends Application
         // Result text box
         TextField resultTextField = new TextField();
         resultTextField.setEditable(false);
+        resultTextField.setText("0");
 
         int i = 1;
         for (int r = 0; r < 5; r++)
@@ -97,6 +98,8 @@ public class Calculator extends Application
                                 textOutput += "=" + String.valueOf(x / y);
                                 break;
                             default:
+                                finishedCalc = true;
+                                resultTextField.setText("Invalid operators provided to calculator.");
                                 throw new IllegalArgumentException("Invalid operators provided to calculator.");
                         }
                         resultTextField.setText(textOutput);
