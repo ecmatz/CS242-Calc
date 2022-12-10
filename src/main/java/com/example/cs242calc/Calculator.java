@@ -3,11 +3,13 @@ package com.example.cs242calc;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 public class Calculator extends Application
@@ -29,6 +31,9 @@ public class Calculator extends Application
         TextField resultTextField = new TextField();
         resultTextField.setEditable(false);
         resultTextField.setText("0");
+        resultTextField.setAlignment(Pos.TOP_LEFT);
+        resultTextField.setPrefSize(100,50);
+        resultTextField.setFont(Font.font("Arial",35));
 
         int i = 1;
         for (int r = 0; r < 5; r++)
@@ -36,6 +41,7 @@ public class Calculator extends Application
             for (int c = 0; c < 2; c++)
             {
                 Button btn = new Button(String.valueOf(i));
+                btn.setPrefSize(50,50);
                 int finalI = i;
                 btn.setOnAction(new EventHandler<ActionEvent>()
                 {
@@ -73,6 +79,7 @@ public class Calculator extends Application
         {
             String op = operators[r];
             Button opbtn = new Button(op);
+            opbtn.setPrefSize(50,50);
             if (op.equals("="))
             {
                 opbtn.setOnAction(new EventHandler<ActionEvent>()
@@ -121,13 +128,17 @@ public class Calculator extends Application
             }
 
             grid.add(opbtn, 2, r);
+            grid.setHgap(10);
+            grid.setVgap(10);
         }
 
         // Visuals
         StackPane root = new StackPane();
-        root.getChildren().add(resultTextField);
         root.getChildren().add(grid);
-        Scene scene = new Scene(root, 600, 700);
+        root.getChildren().add(resultTextField);
+        resultTextField.setAlignment(Pos.TOP_LEFT);
+        grid.setAlignment(Pos.BOTTOM_CENTER);
+        Scene scene = new Scene(root, 300, 670);
         primaryStage.setTitle("Calculator");
         primaryStage.setScene(scene);
         primaryStage.show();
