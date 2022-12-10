@@ -102,7 +102,7 @@ public class Calculator extends Application
                                 textOutput += "=" + String.valueOf(x * y);
                                 break;
                             case "/":
-                                textOutput += "=" + String.valueOf(x / y);
+                                textOutput += "=" + String.valueOf((float)x / (float)y);
                                 break;
                             default:
                                 finishedCalc = true;
